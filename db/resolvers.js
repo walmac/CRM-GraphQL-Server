@@ -16,6 +16,8 @@ const crearToken = (usuario, secreta, expiresIn) => {
 const resolvers = {
     Query: {
         obtenerUsuario: async (_, { }, ctx) => {
+            console.log(ctx.usuario);
+            console.log(ctx);
             return ctx.usuario;
         },
         obtenerProductos: async () => {
@@ -83,7 +85,8 @@ const resolvers = {
         },
         obtenerPedidosVendedor: async (_, {}, ctx) => {
             try {
-                const pedidos = await Pedido.find({ vendedor: ctx.usuario.id });
+                const pedidos = await Pedido.find({ vendedor: ctx.usuario.id }).populate('cliente');
+                console.log(pedidos);
                 return pedidos;
             } catch (error) {
                 console.log(error);
@@ -205,6 +208,7 @@ const resolvers = {
                 if (!passwordCorrecto) {
                     throw new Error("El password es incorrecto");
                 }
+
 
                 // crear el token
                 return {
